@@ -32,7 +32,7 @@ RUN apk --update add \
         php7-xmlreader \
         php7-xmlwriter \
         php7-zip \
-    && rm -rf /var/cache/apk/*
+    && apk add --no-cache
 
 COPY ./config/php.ini /etc/php7/conf.d/50-setting.ini
 COPY ./config/php-fpm.conf /etc/php7/php-fpm.conf
