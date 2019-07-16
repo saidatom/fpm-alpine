@@ -47,7 +47,7 @@ RUN echo 'xdebug.remote_enable=1' >> /etc/php7/php.ini
 RUN echo 'xdebug.remote_connect_back=1' >> /etc/php7/php.ini
 RUN echo 'xdebug.remote_log=/tmp/xdebug.log' >> /etc/php7/php.ini
 RUN echo 'xdebug.remote_autostart=true' >> /etc/php7/php.ini
-RUN echo 'xdebug.remote_port=9004' >> /etc/php7/php.i
+RUN echo 'xdebug.remote_port=9004' >> /etc/php7/php.ini
 
 COPY ./config/php.ini /etc/php7/conf.d/50-setting.ini
 COPY ./config/php-fpm.conf /etc/php7/php-fpm.conf
