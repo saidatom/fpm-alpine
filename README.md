@@ -1,4 +1,4 @@
-PHP-FPM Alpine [![GitHub file size](https://img.shields.io/github/size/webcaetano/craft/build/phaser-craft.min.js.svg?style=for-the-badge)](https://github.com/saidatom/fpm-alpine)
+PHP-FPM Alpine w/xDebug [![GitHub file size](https://img.shields.io/github/size/webcaetano/craft/build/phaser-craft.min.js.svg?style=for-the-badge)](https://github.com/saidatom/fpm-alpine)
 =============
 
 This repo contains a recipe for making a [Docker](http://docker.io) container for Drupal, using Linux, Apache and PHP7.2-FPM.
