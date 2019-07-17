@@ -11,6 +11,8 @@ This will try to go in line with [Drupal automated-testing](https://drupal.org/a
 docker run --rm -p 9000:9000 -v /path/of/application:/application saidatom/fpm-alpine
 ```
 
+Docker environment on your Mac will have `10.254.254.254` as an alias on your loopback device (`127.0.0.1`). The command being run is `ifconfig lo0 alias 10.254.254.254`.
+
 ## Authors
 
 Created and maintained by [Alexandre Dias][author] (<alex.jm.dias_at_gmail.com>)

@@ -41,18 +41,12 @@ RUN apk --update add \
     && apk add --no-cache
 
 RUN pecl install xdebug
-RUN echo 'zend_extension=/usr/lib/php7/modules/xdebug.so' >> /etc/php7/php.ini
-RUN echo 'xdebug.coverage_enable=0' >> /etc/php7/php.ini
-RUN echo 'xdebug.remote_enable=1' >> /etc/php7/php.ini
-RUN echo 'xdebug.remote_connect_back=1' >> /etc/php7/php.ini
-RUN echo 'xdebug.remote_log=/tmp/xdebug.log' >> /etc/php7/php.ini
-RUN echo 'xdebug.remote_autostart=true' >> /etc/php7/php.ini
-RUN echo 'xdebug.remote_port=9004' >> /etc/php7/php.ini
 
-COPY ./config/php.ini /etc/php7/conf.d/50-setting.ini
-COPY ./config/php-fpm.conf /etc/php7/php-fpm.conf
+ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/39626582a4b76a2266109567e65c1cfd219e11f5/php.ini /etc/php7/conf.d/50-setting.ini
+ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/39626582a4b76a2266109567e65c1cfd219e11f5/php-fpm.conf /etc/php7/php-fpm.conf
+ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/8d4200d75cf06518b49f50bd5ae3ee5b54935afd/xdebug.ini /etc/php7/conf.d/xdebug.ini
 
 EXPOSE 9000
-EXPOSE 9004
+EXPOSE 9001
 
 CMD ["php-fpm7", "-F"]
