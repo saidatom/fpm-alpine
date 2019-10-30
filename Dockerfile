@@ -42,9 +42,9 @@ RUN apk --update add \
 
 RUN pecl install xdebug
 
-ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/39626582a4b76a2266109567e65c1cfd219e11f5/php.ini /etc/php7/conf.d/50-setting.ini
-ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/39626582a4b76a2266109567e65c1cfd219e11f5/php-fpm.conf /etc/php7/php-fpm.conf
-ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/8d4200d75cf06518b49f50bd5ae3ee5b54935afd/xdebug.ini /etc/php7/conf.d/xdebug.ini
+ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/ee7cdd19e932a1a75ab28840e2ba309dd5218683/php.ini /etc/php7/conf.d/50-setting.ini
+ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/ee7cdd19e932a1a75ab28840e2ba309dd5218683/php-fpm.conf /etc/php7/php-fpm.conf
+ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/ee7cdd19e932a1a75ab28840e2ba309dd5218683/xdebug.ini /etc/php7/conf.d/xdebug.ini
 
 EXPOSE 9000
 EXPOSE 9001
