@@ -34,6 +34,18 @@ RUN apk --update add \
         php7-zip \
     && apk add --no-cache
 
+RUN apk add --no-cache php7-pear php7-dev gcc musl-dev make
+RUN apk add --no-cache --virtual .build-deps \
+        libxml2-dev \
+        shadow \
+        autoconf \
+        g++ \
+        make \
+    && apk add --no-cache imagemagick-dev imagemagick \
+    && pecl install imagick \
+    && apk del .build-deps \
+    && apk add --no-cache php7-imagick
+
 # workaround for https://github.com/docker-library/php/issues/240
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
