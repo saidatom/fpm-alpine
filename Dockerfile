@@ -40,6 +40,18 @@ RUN apk --update add \
         php7-xdebug \
     && apk add --no-cache
 
+RUN apk add --no-cache php7-pear php7-dev gcc musl-dev make
+RUN apk add --no-cache --virtual .build-deps \
+        libxml2-dev \
+        shadow \
+        autoconf \
+        g++ \
+        make \
+    && apk add --no-cache imagemagick-dev imagemagick \
+    && pecl install imagick \
+    && apk del .build-deps \
+    && apk add --no-cache php7-imagick
+
 RUN pecl install xdebug
 
 ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/ee7cdd19e932a1a75ab28840e2ba309dd5218683/php.ini /etc/php7/conf.d/50-setting.ini
