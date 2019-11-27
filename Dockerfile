@@ -34,6 +34,10 @@ RUN apk --update add \
         php7-zip \
     && apk add --no-cache
 
+# workaround for https://github.com/docker-library/php/issues/240
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ gnu-libiconv
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
 COPY ./config/php.ini /etc/php7/conf.d/50-setting.ini
 COPY ./config/php-fpm.conf /etc/php7/php-fpm.conf
 
