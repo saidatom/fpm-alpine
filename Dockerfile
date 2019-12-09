@@ -38,6 +38,7 @@ RUN apk --update add \
         musl-dev \
         make \
         php7-xdebug \
+        wkhtmltopdf \
     && apk add --no-cache
 
 RUN apk add --no-cache php7-pear php7-dev gcc musl-dev make
