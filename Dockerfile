@@ -1,3 +1,4 @@
+FROM surnet/alpine-wkhtmltopdf:3.9-0.12.5-full as wkhtmltopdf
 FROM alpine:3.8
 MAINTAINER Alexandre Dias <alex.jm.dias@gmail.com>
 
@@ -58,22 +59,36 @@ ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc
 ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/ee7cdd19e932a1a75ab28840e2ba309dd5218683/php-fpm.conf /etc/php7/php-fpm.conf
 ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc/raw/ee7cdd19e932a1a75ab28840e2ba309dd5218683/xdebug.ini /etc/php7/conf.d/xdebug.ini
 
-# workaround for https://github.com/docker-library/php/issues/240
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ gnu-libiconv
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
-
-# install unpatched wkhtmltopdf via package manager to get all dependencies, and add some true type fonts
+# Install dependencies for wkhtmltopdf
 RUN apk add --no-cache \
-    wkhtmltopdf=0.12.5-r0 \
-    ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family
+  libstdc++ \
+  libx11 \
+  libxrender \
+  libxext \
+  libssl1.1 \
+  ca-certificates \
+  fontconfig \
+  freetype \
+  ttf-dejavu \
+  ttf-droid \
+  ttf-freefont \
+  ttf-liberation \
+  ttf-ubuntu-font-family \
+&& apk add --no-cache --virtual .build-deps \
+  msttcorefonts-installer \
+\
+# Install microsoft fonts
+&& update-ms-fonts \
+&& fc-cache -f \
+\
+# Clean up when done
+&& rm -rf /tmp/* \
+&& apk del .build-deps
 
-# patch the binary
-COPY wkhtmltopdf /usr/bin/wkhtmltopdf
-
-# add openssl dependencies
-RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.8/main' >> /etc/apk/repositories && \
-    apk add --no-cache libcrypto1.0 libssl1.0 && \
-    /usr/bin/wkhtmltopdf --version
+# Copy wkhtmltopdf files from docker-wkhtmltopdf image
+COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/wkhtmltopdf
+COPY --from=wkhtmltopdf /bin/wkhtmltoimage /bin/wkhtmltoimage
+COPY --from=wkhtmltopdf /bin/libwkhtmltox* /bin/
 
 EXPOSE 9000
 EXPOSE 9001
