@@ -38,7 +38,6 @@ RUN apk --update add \
         musl-dev \
         make \
         php7-xdebug \
-        wkhtmltopdf \
     && apk add --no-cache
 
 RUN apk add --no-cache php7-pear php7-dev gcc musl-dev make
@@ -62,6 +61,31 @@ ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc
 # workaround for https://github.com/docker-library/php/issues/240
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
+RUN apk add --no-cache \
+            xvfb \
+            # Additionnal dependencies for better rendering
+            ttf-freefont \
+            fontconfig \
+            dbus \
+    && \
+
+    # Install wkhtmltopdf from `testing` repository
+    apk add qt5-qtbase-dev \
+            wkhtmltopdf \
+            --no-cache \
+            --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
+            --allow-untrusted \
+    && \
+
+    # Wrapper for xvfb
+    mv /usr/bin/wkhtmltopdf /usr/bin/wkhtmltopdf-origin && \
+    echo $'#!/usr/bin/env sh\n\
+Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset & \n\
+DISPLAY=:0.0 wkhtmltopdf-origin $@ \n\
+killall Xvfb\
+' > /usr/bin/wkhtmltopdf && \
+    chmod +x /usr/bin/wkhtmltopdf
 
 EXPOSE 9000
 EXPOSE 9001
