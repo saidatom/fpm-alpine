@@ -67,9 +67,6 @@ RUN apk add --update --no-cache \
 # compilation takes 4 hours on EC2 m1.large in 2016 thats why binary
 COPY --from=madnight/alpine-wkhtmltopdf-builder:0.12.5-alpine3.10-606718795 \
     /bin/wkhtmltopdf /bin/wkhtmltopdf
-    
-RUN [ "$(sha256sum /bin/wkhtmltopdf | awk '{ print $1 }')" == \
-      "$(wget -q -O - $BUILD_LOG | sed -n '13685p' | awk '{ print $1 }')" ]
 
 ENTRYPOINT ["wkhtmltopdf"]
 
