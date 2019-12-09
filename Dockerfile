@@ -62,30 +62,18 @@ ADD https://gist.githubusercontent.com/saidatom/11294a8dea523e7cdd10b482cce937fc
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
+# install unpatched wkhtmltopdf via package manager to get all dependencies, and add some true type fonts
 RUN apk add --no-cache \
-            xvfb \
-            # Additionnal dependencies for better rendering
-            ttf-freefont \
-            fontconfig \
-            dbus \
-    && \
+    wkhtmltopdf=0.12.5-r0 \
+    ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family
 
-    # Install wkhtmltopdf from `testing` repository
-    apk add qt5-qtbase-dev \
-            wkhtmltopdf \
-            --no-cache \
-            --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
-            --allow-untrusted \
-    && \
+# patch the binary
+COPY wkhtmltopdf /usr/bin/wkhtmltopdf
 
-    # Wrapper for xvfb
-    mv /usr/bin/wkhtmltopdf /usr/bin/wkhtmltopdf-origin && \
-    echo $'#!/usr/bin/env sh\n\
-Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset & \n\
-DISPLAY=:0.0 wkhtmltopdf-origin $@ \n\
-killall Xvfb\
-' > /usr/bin/wkhtmltopdf && \
-    chmod +x /usr/bin/wkhtmltopdf
+# add openssl dependencies
+RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.8/main' >> /etc/apk/repositories && \
+    apk add --no-cache libcrypto1.0 libssl1.0 && \
+    /usr/bin/wkhtmltopdf --version
 
 EXPOSE 9000
 EXPOSE 9001
